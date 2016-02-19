@@ -2,24 +2,30 @@ package users
 
 import (
 	"html/template"
+	"time"
 
 	"golang.org/x/net/context"
 )
 
 // Service for users.
 type Service interface {
-	// CONSIDER: AuthenticatedUser()
-	CurrentUser(ctx context.Context) (*User, error)
+	// GetAuthenticated fetches the currently authenticated user,
+	// or nil if there is no authenticated user.
+	GetAuthenticated(ctx context.Context) (*User, error)
 
-	// Get fetches a user.
-	// CONSIDER: Passing the empty string will fetch the authenticated user.
-	Get(ctx context.Context, u UserSpec) (*User, error)
+	// Get fetches the specified user.
+	Get(ctx context.Context, user UserSpec) (*User, error)
 
 	// Edit the authenticated user.
-	Edit(user *User) (*User, error)
+	Edit(ctx context.Context, user *User) (*User, error)
 
 	// CONSIDER: Delete user.
-	//Delete(user UserSpec) error
+	//Delete(ctx context.Context, user UserSpec) error
+}
+
+type UserSpec struct {
+	ID     uint64
+	Domain string
 }
 
 // User represents a user.
@@ -32,13 +38,8 @@ type User struct {
 	Name  string
 	Email string // Public email.
 
-	CreatedAt
-	UpdatedAt
+	CreatedAt time.Time
+	UpdatedAt time.Time
 
 	SiteAdmin bool
-}
-
-type UserSpec struct {
-	ID     uint64
-	Domain string
 }
