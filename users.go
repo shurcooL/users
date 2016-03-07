@@ -14,9 +14,9 @@ type Service interface {
 	// Get fetches the specified user.
 	Get(ctx context.Context, user UserSpec) (*User, error)
 
-	// GetAuthenticated fetches the currently authenticated user,
+	// GetAuthenticated fetches the currently authenticated user specification,
 	// or nil if there is no authenticated user.
-	GetAuthenticated(ctx context.Context) (*User, error)
+	GetAuthenticated(ctx context.Context) (*UserSpec, error)
 
 	// Edit the authenticated user.
 	Edit(ctx context.Context, user *User) (*User, error)
@@ -92,8 +92,8 @@ func (Static) Get(ctx context.Context, user UserSpec) (*User, error) {
 		}, nil
 	case UserSpec{ID: 3, Domain: ds}: // Michal Marcinkowski.
 		return &User{
-			UserSpec: user,
-			//Elsewhere: []UserSpec{{TODO: "https://twitter.com/twitmm"}},
+			UserSpec:  user,
+			Elsewhere: []UserSpec{{ID: 15185890, Domain: tw}},
 			Login:     "Michal Marcinkowski",
 			Name:      "Michal Marcinkowski",
 			AvatarURL: "https://secure.gravatar.com/avatar?d=mm&f=y&s=96",
@@ -116,43 +116,67 @@ func (Static) Get(ctx context.Context, user UserSpec) (*User, error) {
 		return &User{
 			UserSpec:  user,
 			Elsewhere: []UserSpec{{ID: 1976, Domain: gh}},
+			Login:     "sqs",
+			AvatarURL: "https://avatars.githubusercontent.com/u/1976?v=3",
+			HTMLURL:   "https://github.com/sqs",
 		}, nil
 	case UserSpec{ID: 678177, Domain: ssg}: // slimsag.
 		return &User{
 			UserSpec:  user,
 			Elsewhere: []UserSpec{{ID: 3173176, Domain: gh}},
+			Login:     "slimsag",
+			AvatarURL: "https://avatars.githubusercontent.com/u/3173176?v=3",
+			HTMLURL:   "https://github.com/slimsag",
 		}, nil
 	case UserSpec{ID: 678180, Domain: ssg}: // keegancsmith.
 		return &User{
 			UserSpec:  user,
 			Elsewhere: []UserSpec{{ID: 187831, Domain: gh}},
+			Login:     "keegancsmith",
+			AvatarURL: "https://avatars.githubusercontent.com/u/187831?v=3",
+			HTMLURL:   "https://github.com/keegancsmith",
 		}, nil
 	case UserSpec{ID: 678179, Domain: ssg}: // renfredxh.
 		return &User{
 			UserSpec:  user,
 			Elsewhere: []UserSpec{{ID: 3800339, Domain: gh}},
+			Login:     "renfredxh",
+			AvatarURL: "https://avatars.githubusercontent.com/u/3800339?v=3",
+			HTMLURL:   "https://github.com/renfredxh",
 		}, nil
 	case UserSpec{ID: 678176, Domain: ssg}: // nicot.
 		return &User{
 			UserSpec:  user,
 			Elsewhere: []UserSpec{{ID: 3722365, Domain: gh}},
+			Login:     "nicot",
+			AvatarURL: "https://avatars.githubusercontent.com/u/3722365?v=3",
+			HTMLURL:   "https://github.com/nicot",
 		}, nil
 	case UserSpec{ID: 678357, Domain: ssg}: // rothfels.
 		return &User{
 			UserSpec:  user,
 			Elsewhere: []UserSpec{{ID: 1095573, Domain: gh}},
+			Login:     "rothfels",
+			AvatarURL: "https://avatars.githubusercontent.com/u/1095573?v=3",
+			HTMLURL:   "https://github.com/rothfels",
 		}, nil
 	case UserSpec{ID: 678225, Domain: ssg}: // beyang.
 		return &User{
 			UserSpec:  user,
 			Elsewhere: []UserSpec{{ID: 1646931, Domain: gh}},
+			Login:     "beyang",
+			AvatarURL: "https://avatars.githubusercontent.com/u/1646931?v=3",
+			HTMLURL:   "https://github.com/beyang",
 		}, nil
 	default:
 		return nil, fmt.Errorf("user %v not found", user)
 	}
 }
 
-func (Static) GetAuthenticated(ctx context.Context) (*User, error) {
+func (s Static) GetAuthenticated(ctx context.Context) (*UserSpec, error) {
+	// TEMP, HACK: Pretend I'm logged in (for testing).
+	//return &UserSpec{ID: 1924134, Domain: "github.com"}, nil
+
 	// Authenticated user not yet supported.
 	return nil, nil
 }
