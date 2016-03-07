@@ -35,8 +35,7 @@ type User struct {
 	AvatarURL template.URL
 	HTMLURL   template.URL
 
-	Name  string
-	Email string // Public email.
+	Name string
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
