@@ -12,14 +12,14 @@ import (
 // Service for users.
 type Service interface {
 	// Get fetches the specified user.
-	Get(ctx context.Context, user UserSpec) (*User, error)
+	Get(ctx context.Context, user UserSpec) (User, error)
 
 	// GetAuthenticated fetches the currently authenticated user specification,
 	// or nil if there is no authenticated user.
 	GetAuthenticated(ctx context.Context) (*UserSpec, error)
 
 	// Edit the authenticated user.
-	Edit(ctx context.Context, user *User) (*User, error)
+	Edit(ctx context.Context, user User) (User, error)
 
 	// CONSIDER: Delete user.
 	//Delete(ctx context.Context, user UserSpec) error
@@ -50,7 +50,7 @@ type User struct {
 // Static implementation of users.Service.
 type Static struct{}
 
-func (Static) Get(ctx context.Context, user UserSpec) (*User, error) {
+func (Static) Get(ctx context.Context, user UserSpec) (User, error) {
 	const (
 		ssg = "src.sourcegraph.com"
 		gh  = "github.com"
@@ -60,7 +60,7 @@ func (Static) Get(ctx context.Context, user UserSpec) (*User, error) {
 
 	switch user {
 	case UserSpec{ID: 678271, Domain: ssg}, UserSpec{ID: 1924134, Domain: gh}:
-		return &User{
+		return User{
 			UserSpec:  user,
 			Elsewhere: []UserSpec{ /*{ID: 1, Domain: ds},*/ {ID: 1924134, Domain: gh}, {ID: 21361484, Domain: tw}},
 			Login:     "shurcooL",
@@ -70,28 +70,28 @@ func (Static) Get(ctx context.Context, user UserSpec) (*User, error) {
 			SiteAdmin: true,
 		}, nil
 	case UserSpec{ID: 4332971, Domain: gh}: // Mee.
-		return &User{
+		return User{
 			UserSpec:  user,
 			Login:     "purple-snow",
 			AvatarURL: "https://avatars.githubusercontent.com/u/4332971?v=3",
 			HTMLURL:   "https://github.com/purple-snow",
 		}, nil
 	case UserSpec{ID: 43004, Domain: gh}: // pbakaus.
-		return &User{
+		return User{
 			UserSpec:  user,
 			Login:     "pbakaus",
 			AvatarURL: "https://avatars.githubusercontent.com/u/43004?v=3",
 			HTMLURL:   "https://github.com/pbakaus",
 		}, nil
 	case UserSpec{ID: 2, Domain: ds}: // Bernardo.
-		return &User{
+		return User{
 			UserSpec:  user,
 			Login:     "Bernardo",
 			Name:      "Bernardo",
 			AvatarURL: "https://secure.gravatar.com/avatar?d=mm&f=y&s=96",
 		}, nil
 	case UserSpec{ID: 3, Domain: ds}: // Michal Marcinkowski.
-		return &User{
+		return User{
 			UserSpec:  user,
 			Elsewhere: []UserSpec{{ID: 15185890, Domain: tw}},
 			Login:     "Michal Marcinkowski",
@@ -99,21 +99,21 @@ func (Static) Get(ctx context.Context, user UserSpec) (*User, error) {
 			AvatarURL: "https://secure.gravatar.com/avatar?d=mm&f=y&s=96",
 		}, nil
 	case UserSpec{ID: 4, Domain: ds}: // Anders Elfgren.
-		return &User{
+		return User{
 			UserSpec:  user,
 			Login:     "Anders Elfgren",
 			Name:      "Anders Elfgren",
 			AvatarURL: "https://secure.gravatar.com/avatar?d=mm&f=y&s=96",
 		}, nil
 	case UserSpec{ID: 5, Domain: ds}: // benp.
-		return &User{
+		return User{
 			UserSpec:  user,
 			Login:     "benp",
 			AvatarURL: "https://secure.gravatar.com/avatar?d=mm&f=y&s=96",
 		}, nil
 
 	case UserSpec{ID: 678175, Domain: ssg}: // sqs.
-		return &User{
+		return User{
 			UserSpec:  user,
 			Elsewhere: []UserSpec{{ID: 1976, Domain: gh}},
 			Login:     "sqs",
@@ -121,7 +121,7 @@ func (Static) Get(ctx context.Context, user UserSpec) (*User, error) {
 			HTMLURL:   "https://github.com/sqs",
 		}, nil
 	case UserSpec{ID: 678177, Domain: ssg}: // slimsag.
-		return &User{
+		return User{
 			UserSpec:  user,
 			Elsewhere: []UserSpec{{ID: 3173176, Domain: gh}},
 			Login:     "slimsag",
@@ -129,7 +129,7 @@ func (Static) Get(ctx context.Context, user UserSpec) (*User, error) {
 			HTMLURL:   "https://github.com/slimsag",
 		}, nil
 	case UserSpec{ID: 678180, Domain: ssg}: // keegancsmith.
-		return &User{
+		return User{
 			UserSpec:  user,
 			Elsewhere: []UserSpec{{ID: 187831, Domain: gh}},
 			Login:     "keegancsmith",
@@ -137,7 +137,7 @@ func (Static) Get(ctx context.Context, user UserSpec) (*User, error) {
 			HTMLURL:   "https://github.com/keegancsmith",
 		}, nil
 	case UserSpec{ID: 678179, Domain: ssg}: // renfredxh.
-		return &User{
+		return User{
 			UserSpec:  user,
 			Elsewhere: []UserSpec{{ID: 3800339, Domain: gh}},
 			Login:     "renfredxh",
@@ -145,7 +145,7 @@ func (Static) Get(ctx context.Context, user UserSpec) (*User, error) {
 			HTMLURL:   "https://github.com/renfredxh",
 		}, nil
 	case UserSpec{ID: 678176, Domain: ssg}: // nicot.
-		return &User{
+		return User{
 			UserSpec:  user,
 			Elsewhere: []UserSpec{{ID: 3722365, Domain: gh}},
 			Login:     "nicot",
@@ -153,7 +153,7 @@ func (Static) Get(ctx context.Context, user UserSpec) (*User, error) {
 			HTMLURL:   "https://github.com/nicot",
 		}, nil
 	case UserSpec{ID: 678357, Domain: ssg}: // rothfels.
-		return &User{
+		return User{
 			UserSpec:  user,
 			Elsewhere: []UserSpec{{ID: 1095573, Domain: gh}},
 			Login:     "rothfels",
@@ -161,7 +161,7 @@ func (Static) Get(ctx context.Context, user UserSpec) (*User, error) {
 			HTMLURL:   "https://github.com/rothfels",
 		}, nil
 	case UserSpec{ID: 678225, Domain: ssg}: // beyang.
-		return &User{
+		return User{
 			UserSpec:  user,
 			Elsewhere: []UserSpec{{ID: 1646931, Domain: gh}},
 			Login:     "beyang",
@@ -169,7 +169,7 @@ func (Static) Get(ctx context.Context, user UserSpec) (*User, error) {
 			HTMLURL:   "https://github.com/beyang",
 		}, nil
 	default:
-		return nil, fmt.Errorf("user %v not found", user)
+		return User{}, fmt.Errorf("user %v not found", user)
 	}
 }
 
@@ -181,6 +181,6 @@ func (s Static) GetAuthenticated(ctx context.Context) (*UserSpec, error) {
 	return nil, nil
 }
 
-func (Static) Edit(ctx context.Context, user *User) (*User, error) {
-	return nil, errors.New("Edit is not implemented")
+func (Static) Edit(ctx context.Context, user User) (User, error) {
+	return User{}, errors.New("Edit is not implemented")
 }
