@@ -58,17 +58,18 @@ type Static struct{}
 
 func (Static) Get(ctx context.Context, user UserSpec) (User, error) {
 	const (
-		ssg = "src.sourcegraph.com"
 		gh  = "github.com"
 		tw  = "twitter.com"
 		ds  = "dmitri.shuralyov.com"
+		ssg = "src.sourcegraph.com"
 	)
 
 	switch user {
-	case UserSpec{ID: 678271, Domain: ssg}, UserSpec{ID: 1924134, Domain: gh}:
+	case UserSpec{ID: 1924134, Domain: gh}, UserSpec{ID: 678271, Domain: ssg}:
+		// TODO: Consider using UserSpec{ID: 1, Domain: ds}.
 		return User{
-			UserSpec:  user,
-			Elsewhere: []UserSpec{ /*{ID: 1, Domain: ds},*/ {ID: 1924134, Domain: gh}, {ID: 21361484, Domain: tw}},
+			UserSpec:  UserSpec{ID: 1924134, Domain: gh},
+			Elsewhere: []UserSpec{{ID: 678271, Domain: ssg}, {ID: 21361484, Domain: tw}},
 			Login:     "shurcooL",
 			Name:      "Dmitri Shuralyov",
 			AvatarURL: "https://dmitri.shuralyov.com/avatar.jpg",
@@ -118,58 +119,58 @@ func (Static) Get(ctx context.Context, user UserSpec) (User, error) {
 			AvatarURL: "https://secure.gravatar.com/avatar?d=mm&f=y&s=96",
 		}, nil
 
-	case UserSpec{ID: 678175, Domain: ssg}: // sqs.
+	case UserSpec{ID: 1976, Domain: gh}, UserSpec{ID: 678175, Domain: ssg}: // sqs.
 		return User{
-			UserSpec:  user,
-			Elsewhere: []UserSpec{{ID: 1976, Domain: gh}},
+			UserSpec:  UserSpec{ID: 1976, Domain: gh},
+			Elsewhere: []UserSpec{{ID: 678175, Domain: ssg}},
 			Login:     "sqs",
 			AvatarURL: "https://avatars.githubusercontent.com/u/1976?v=3",
 			HTMLURL:   "https://github.com/sqs",
 		}, nil
-	case UserSpec{ID: 678177, Domain: ssg}: // slimsag.
+	case UserSpec{ID: 3173176, Domain: gh}, UserSpec{ID: 678177, Domain: ssg}: // slimsag.
 		return User{
-			UserSpec:  user,
-			Elsewhere: []UserSpec{{ID: 3173176, Domain: gh}},
+			UserSpec:  UserSpec{ID: 3173176, Domain: gh},
+			Elsewhere: []UserSpec{{ID: 678177, Domain: ssg}},
 			Login:     "slimsag",
 			AvatarURL: "https://avatars.githubusercontent.com/u/3173176?v=3",
 			HTMLURL:   "https://github.com/slimsag",
 		}, nil
-	case UserSpec{ID: 678180, Domain: ssg}: // keegancsmith.
+	case UserSpec{ID: 187831, Domain: gh}, UserSpec{ID: 678180, Domain: ssg}: // keegancsmith.
 		return User{
-			UserSpec:  user,
-			Elsewhere: []UserSpec{{ID: 187831, Domain: gh}},
+			UserSpec:  UserSpec{ID: 187831, Domain: gh},
+			Elsewhere: []UserSpec{{ID: 678180, Domain: ssg}},
 			Login:     "keegancsmith",
 			AvatarURL: "https://avatars.githubusercontent.com/u/187831?v=3",
 			HTMLURL:   "https://github.com/keegancsmith",
 		}, nil
-	case UserSpec{ID: 678179, Domain: ssg}: // renfredxh.
+	case UserSpec{ID: 3800339, Domain: gh}, UserSpec{ID: 678179, Domain: ssg}: // renfredxh.
 		return User{
-			UserSpec:  user,
-			Elsewhere: []UserSpec{{ID: 3800339, Domain: gh}},
+			UserSpec:  UserSpec{ID: 3800339, Domain: gh},
+			Elsewhere: []UserSpec{{ID: 678179, Domain: ssg}},
 			Login:     "renfredxh",
 			AvatarURL: "https://avatars.githubusercontent.com/u/3800339?v=3",
 			HTMLURL:   "https://github.com/renfredxh",
 		}, nil
-	case UserSpec{ID: 678176, Domain: ssg}: // nicot.
+	case UserSpec{ID: 3722365, Domain: gh}, UserSpec{ID: 678176, Domain: ssg}: // nicot.
 		return User{
-			UserSpec:  user,
-			Elsewhere: []UserSpec{{ID: 3722365, Domain: gh}},
+			UserSpec:  UserSpec{ID: 3722365, Domain: gh},
+			Elsewhere: []UserSpec{{ID: 678176, Domain: ssg}},
 			Login:     "nicot",
 			AvatarURL: "https://avatars.githubusercontent.com/u/3722365?v=3",
 			HTMLURL:   "https://github.com/nicot",
 		}, nil
-	case UserSpec{ID: 678357, Domain: ssg}: // rothfels.
+	case UserSpec{ID: 1095573, Domain: gh}, UserSpec{ID: 678357, Domain: ssg}: // rothfels.
 		return User{
-			UserSpec:  user,
-			Elsewhere: []UserSpec{{ID: 1095573, Domain: gh}},
+			UserSpec:  UserSpec{ID: 1095573, Domain: gh},
+			Elsewhere: []UserSpec{{ID: 678357, Domain: ssg}},
 			Login:     "rothfels",
 			AvatarURL: "https://avatars.githubusercontent.com/u/1095573?v=3",
 			HTMLURL:   "https://github.com/rothfels",
 		}, nil
-	case UserSpec{ID: 678225, Domain: ssg}: // beyang.
+	case UserSpec{ID: 1646931, Domain: gh}, UserSpec{ID: 678225, Domain: ssg}: // beyang.
 		return User{
-			UserSpec:  user,
-			Elsewhere: []UserSpec{{ID: 1646931, Domain: gh}},
+			UserSpec:  UserSpec{ID: 1646931, Domain: gh},
+			Elsewhere: []UserSpec{{ID: 678225, Domain: ssg}},
 			Login:     "beyang",
 			AvatarURL: "https://avatars.githubusercontent.com/u/1646931?v=3",
 			HTMLURL:   "https://github.com/beyang",
