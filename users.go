@@ -14,12 +14,13 @@ type Service interface {
 	// Get fetches the specified user.
 	Get(ctx context.Context, user UserSpec) (User, error)
 
+	// TODO: Consider zero value UserSpec instead of nil for no user.
 	// GetAuthenticated fetches the currently authenticated user specification,
 	// or nil if there is no authenticated user.
 	GetAuthenticated(ctx context.Context) (*UserSpec, error)
 
 	// Edit the authenticated user.
-	Edit(ctx context.Context, user User) (User, error)
+	Edit(ctx context.Context, er EditRequest) (User, error)
 
 	// CONSIDER: Delete user.
 	//Delete(ctx context.Context, user UserSpec) error
@@ -45,6 +46,11 @@ type User struct {
 	UpdatedAt time.Time
 
 	SiteAdmin bool
+}
+
+// EditRequest represents a request to edit a user.
+type EditRequest struct {
+	// Currently nothing, but editable fields will be added here in the future.
 }
 
 // Static implementation of users.Service.
@@ -181,6 +187,6 @@ func (s Static) GetAuthenticated(ctx context.Context) (*UserSpec, error) {
 	return nil, nil
 }
 
-func (Static) Edit(ctx context.Context, user User) (User, error) {
+func (Static) Edit(ctx context.Context, er EditRequest) (User, error) {
 	return User{}, errors.New("Edit is not implemented")
 }
