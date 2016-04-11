@@ -1,3 +1,4 @@
+// Package users provides a users service definition.
 package users
 
 import (
