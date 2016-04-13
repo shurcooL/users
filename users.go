@@ -25,6 +25,7 @@ type Service interface {
 	//Delete(ctx context.Context, user UserSpec) error
 }
 
+// UserSpec specifies a user.
 type UserSpec struct {
 	ID     uint64
 	Domain string
