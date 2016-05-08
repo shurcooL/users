@@ -23,16 +23,15 @@ func NewService(client *github.Client) users.Service {
 		cl: client,
 	}
 
-	if user, _, err := client.Users.Get(""); err == nil {
-		u := ghUser(user)
-		s.currentUser = &u.UserSpec
+	if u, _, err := s.cl.Users.Get(""); err == nil {
+		s.currentUser = ghUser(u)
 		s.currentUserErr = nil
 	} else if ghErr, ok := err.(*github.ErrorResponse); ok && ghErr.Response.StatusCode == http.StatusUnauthorized {
 		// There's no authenticated user.
-		s.currentUser = nil
+		s.currentUser = users.User{}
 		s.currentUserErr = nil
 	} else {
-		s.currentUser = nil
+		s.currentUser = users.User{}
 		s.currentUserErr = err
 	}
 
@@ -42,7 +41,7 @@ func NewService(client *github.Client) users.Service {
 type service struct {
 	cl *github.Client
 
-	currentUser    *users.UserSpec
+	currentUser    users.User
 	currentUserErr error
 }
 
@@ -66,23 +65,12 @@ func (s service) Get(ctx context.Context, user users.UserSpec) (users.User, erro
 	}, nil
 }
 
-func (s service) GetAuthenticated(ctx context.Context) (*users.UserSpec, error) {
+func (s service) GetAuthenticated(ctx context.Context) (users.User, error) {
 	return s.currentUser, s.currentUserErr
+}
 
-	/*if user, _, err := s.cl.Users.Get(""); err == nil {
-		if user.ID == nil {
-			return nil, fmt.Errorf("github user missing ID field: %#v", user)
-		}
-		return &users.UserSpec{
-			ID:     uint64(*user.ID),
-			Domain: "github.com",
-		}, nil
-	} else if ghErr, ok := err.(*github.ErrorResponse); ok && ghErr.Response.StatusCode == http.StatusUnauthorized {
-		// There's no authenticated user.
-		return nil, nil
-	} else {
-		return nil, err
-	}*/
+func (s service) GetAuthenticatedSpec(ctx context.Context) (users.UserSpec, error) {
+	return s.currentUser.UserSpec, s.currentUserErr
 }
 
 func (s service) Edit(ctx context.Context, er users.EditRequest) (users.User, error) {

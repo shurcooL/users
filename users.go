@@ -13,10 +13,13 @@ type Service interface {
 	// Get fetches the specified user.
 	Get(ctx context.Context, user UserSpec) (User, error)
 
-	// TODO: Consider zero value UserSpec instead of nil for no user.
-	// GetAuthenticated fetches the currently authenticated user specification,
-	// or nil if there is no authenticated user.
-	GetAuthenticated(ctx context.Context) (*UserSpec, error)
+	// GetAuthenticatedSpec fetches the currently authenticated user specification,
+	// or UserSpec{ID: 0} if there is no authenticated user.
+	GetAuthenticatedSpec(ctx context.Context) (UserSpec, error)
+
+	// GetAuthenticated fetches the currently authenticated user,
+	// or User{UserSpec: UserSpec{ID: 0}} if there is no authenticated user.
+	GetAuthenticated(ctx context.Context) (User, error)
 
 	// Edit the authenticated user.
 	Edit(ctx context.Context, er EditRequest) (User, error)
@@ -26,6 +29,7 @@ type Service interface {
 }
 
 // UserSpec specifies a user.
+// ID value 0 represents no user. Valid users may not use 0 as their ID.
 type UserSpec struct {
 	ID     uint64
 	Domain string
