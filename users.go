@@ -2,10 +2,9 @@
 package users
 
 import (
+	"context"
 	"html/template"
 	"time"
-
-	"golang.org/x/net/context"
 )
 
 // Service for users.

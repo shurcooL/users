@@ -2,13 +2,13 @@
 package asanaapi
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"html/template"
 
 	"github.com/shurcooL/users"
 	"github.com/tambet/go-asana/asana"
-	"golang.org/x/net/context"
 )
 
 // NewService creates a Asana-backed users.Service using given Asana client.

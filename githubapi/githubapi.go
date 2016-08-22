@@ -2,6 +2,7 @@
 package githubapi
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"html/template"
@@ -9,7 +10,6 @@ import (
 
 	"github.com/google/go-github/github"
 	"github.com/shurcooL/users"
-	"golang.org/x/net/context"
 )
 
 // NewService creates a GitHub-backed users.Service using given GitHub client.
