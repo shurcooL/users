@@ -12,8 +12,11 @@ type Service interface {
 	// Get fetches the specified user.
 	Get(ctx context.Context, user UserSpec) (User, error)
 
-	// GetAuthenticatedSpec fetches the currently authenticated user specification,
-	// or UserSpec{ID: 0} if there is no authenticated user.
+	// GetAuthenticatedSpec fetches the currently authenticated
+	// user specification, or UserSpec{ID: 0} if there is no
+	// authenticated user. A non-nil error is returned if the
+	// the authentication process was not able to successfully
+	// determine if a user or no user is currently authenticated.
 	GetAuthenticatedSpec(ctx context.Context) (UserSpec, error)
 
 	// GetAuthenticated fetches the currently authenticated user,
