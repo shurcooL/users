@@ -25,7 +25,7 @@ func NewService(client *asana.Client) users.Service {
 	if u, err := s.cl.GetAuthenticatedUser(nil); err == nil {
 		s.currentUser = asanaUser(u)
 		s.currentUserErr = nil
-	} else if err, ok := err.(asana.Error); ok && err.Message == "Not Authorized" {
+	} else if anErr, ok := err.(asana.Error); ok && anErr.Message == "Not Authorized" {
 		// There's no authenticated user.
 		s.currentUser = users.User{}
 		s.currentUserErr = nil
