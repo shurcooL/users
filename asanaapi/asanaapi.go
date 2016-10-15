@@ -22,10 +22,10 @@ func NewService(client *asana.Client) users.Service {
 		cl: client,
 	}
 
-	if u, err := s.cl.GetAuthenticatedUser(nil); err == nil {
+	if u, err := s.cl.GetAuthenticatedUser(context.Background(), nil); err == nil {
 		s.currentUser = asanaUser(u)
 		s.currentUserErr = nil
-	} else if anErr, ok := err.(asana.Error); ok && anErr.Message == "Not Authorized" {
+	} else if err == asana.ErrUnauthorized {
 		// There's no authenticated user.
 		s.currentUser = users.User{}
 		s.currentUserErr = nil
@@ -49,7 +49,7 @@ func (s service) Get(ctx context.Context, user users.UserSpec) (users.User, erro
 		return users.User{}, fmt.Errorf("user %v not found", user)
 	}
 
-	u, err := s.cl.GetUserByID(int64(user.ID), nil)
+	u, err := s.cl.GetUserByID(ctx, int64(user.ID), nil)
 	if err != nil {
 		return users.User{}, err
 	}
