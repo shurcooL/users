@@ -25,6 +25,16 @@ type Service interface {
 
 	// Edit the authenticated user.
 	Edit(ctx context.Context, er EditRequest) (User, error)
+}
+
+// Store for users.
+type Store interface {
+	// Create creates the specified user.
+	// It returns os.ErrExist if the user already exists.
+	Create(ctx context.Context, user User) error
+
+	// Get fetches the specified user.
+	Get(ctx context.Context, user UserSpec) (User, error)
 
 	// CONSIDER: Delete user.
 	//Delete(ctx context.Context, user UserSpec) error
