@@ -26,8 +26,7 @@ type user struct {
 	//CreatedAt time.Time
 	//UpdatedAt time.Time
 
-	// CONSIDER.
-	//SiteAdmin bool `json:",omitempty"`
+	SiteAdmin bool `json:",omitempty"`
 }
 
 func fromUser(u users.User) user {
@@ -47,6 +46,8 @@ func fromUser(u users.User) user {
 
 		//CreatedAt: u.CreatedAt,
 		//UpdatedAt: u.UpdatedAt,
+
+		SiteAdmin: u.SiteAdmin,
 	}
 }
 
@@ -68,7 +69,7 @@ func (u user) User() users.User {
 		//CreatedAt: u.CreatedAt,
 		//UpdatedAt: u.UpdatedAt,
 
-		SiteAdmin: false,
+		SiteAdmin: u.SiteAdmin,
 	}
 }
 
