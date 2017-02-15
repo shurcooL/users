@@ -1,10 +1,6 @@
 package fs
 
-import (
-	"html/template"
-
-	"github.com/shurcooL/users"
-)
+import "github.com/shurcooL/users"
 
 // Tree layout:
 //
@@ -63,8 +59,8 @@ func (u user) User() users.User {
 		Login:     u.Login,
 		Name:      u.Name,
 		Email:     u.Email,
-		AvatarURL: template.URL(u.AvatarURL),
-		HTMLURL:   template.URL(u.HTMLURL),
+		AvatarURL: u.AvatarURL,
+		HTMLURL:   u.HTMLURL,
 
 		//CreatedAt: u.CreatedAt,
 		//UpdatedAt: u.UpdatedAt,

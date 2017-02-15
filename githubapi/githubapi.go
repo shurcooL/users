@@ -5,7 +5,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"html/template"
 	"net/http"
 
 	"github.com/google/go-github/github"
@@ -60,8 +59,8 @@ func (s service) Get(ctx context.Context, user users.UserSpec) (users.User, erro
 	return users.User{
 		UserSpec:  user,
 		Login:     *ghUser.Login,
-		AvatarURL: template.URL(*ghUser.AvatarURL),
-		HTMLURL:   template.URL(*ghUser.HTMLURL),
+		AvatarURL: *ghUser.AvatarURL,
+		HTMLURL:   *ghUser.HTMLURL,
 	}, nil
 }
 
@@ -84,7 +83,7 @@ func ghUser(user *github.User) users.User {
 			Domain: "github.com",
 		},
 		Login:     *user.Login,
-		AvatarURL: template.URL(*user.AvatarURL),
-		HTMLURL:   template.URL(*user.HTMLURL),
+		AvatarURL: *user.AvatarURL,
+		HTMLURL:   *user.HTMLURL,
 	}
 }

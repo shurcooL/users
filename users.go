@@ -3,7 +3,6 @@ package users
 
 import (
 	"context"
-	"html/template"
 	"time"
 )
 
@@ -55,8 +54,8 @@ type User struct {
 	Login     string
 	Name      string
 	Email     string // Public email.
-	AvatarURL template.URL
-	HTMLURL   template.URL
+	AvatarURL string
+	HTMLURL   string
 
 	CreatedAt time.Time
 	UpdatedAt time.Time

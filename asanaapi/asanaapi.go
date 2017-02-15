@@ -5,7 +5,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"html/template"
 
 	"github.com/shurcooL/users"
 	"github.com/tambet/go-asana/asana"
@@ -77,6 +76,6 @@ func asanaUser(user asana.User) users.User {
 		Login:     user.Name,
 		Name:      user.Name,
 		Email:     user.Email,
-		AvatarURL: template.URL(user.Photo["image_128x128"]),
+		AvatarURL: user.Photo["image_128x128"],
 	}
 }
