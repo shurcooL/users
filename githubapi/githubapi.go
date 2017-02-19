@@ -22,7 +22,7 @@ func NewService(client *github.Client) users.Service {
 		cl: client,
 	}
 
-	if u, _, err := s.cl.Users.Get(""); err == nil {
+	if u, _, err := s.cl.Users.Get(context.Background(), ""); err == nil {
 		s.currentUser = ghUser(u)
 		s.currentUserErr = nil
 	} else if ghErr, ok := err.(*github.ErrorResponse); ok && ghErr.Response.StatusCode == http.StatusUnauthorized {
@@ -49,7 +49,7 @@ func (s service) Get(ctx context.Context, user users.UserSpec) (users.User, erro
 		return users.User{}, fmt.Errorf("user %v not found", user)
 	}
 
-	ghUser, _, err := s.cl.Users.GetByID(int(user.ID))
+	ghUser, _, err := s.cl.Users.GetByID(ctx, int(user.ID))
 	if err != nil {
 		return users.User{}, err
 	}
