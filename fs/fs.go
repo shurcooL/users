@@ -75,6 +75,7 @@ func (s *store) Create(ctx context.Context, user users.User) error {
 		return err
 	}
 
+	// Commit to memory second.
 	s.users[user.UserSpec] = user
 	return nil
 }
