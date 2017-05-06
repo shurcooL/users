@@ -37,8 +37,8 @@ func fromUser(u users.User) user {
 		Login:     u.Login,
 		Name:      u.Name,
 		Email:     u.Email,
-		AvatarURL: string(u.AvatarURL),
-		HTMLURL:   string(u.HTMLURL),
+		AvatarURL: u.AvatarURL,
+		HTMLURL:   u.HTMLURL,
 
 		//CreatedAt: u.CreatedAt,
 		//UpdatedAt: u.UpdatedAt,
