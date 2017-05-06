@@ -33,9 +33,6 @@ type store struct {
 }
 
 func (s *store) load() error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
 	f, err := s.fs.OpenFile(context.Background(), "users", os.O_RDONLY|os.O_CREATE, 0600)
 	if err != nil {
 		return err
