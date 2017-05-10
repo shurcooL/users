@@ -76,9 +76,9 @@ type userSpec struct {
 }
 
 func fromUserSpec(us users.UserSpec) userSpec {
-	return userSpec{ID: us.ID, Domain: us.Domain}
+	return userSpec(us)
 }
 
 func (us userSpec) UserSpec() users.UserSpec {
-	return users.UserSpec{ID: us.ID, Domain: us.Domain}
+	return users.UserSpec(us)
 }
