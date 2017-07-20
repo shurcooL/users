@@ -53,8 +53,11 @@ func (s service) Get(ctx context.Context, user users.UserSpec) (users.User, erro
 	if err != nil {
 		return users.User{}, err
 	}
-	if ghUser.Login == nil || ghUser.AvatarURL == nil || ghUser.HTMLURL == nil {
+	if ghUser.ID == nil || ghUser.Login == nil || ghUser.AvatarURL == nil || ghUser.HTMLURL == nil {
 		return users.User{}, fmt.Errorf("github user missing fields: %#v", ghUser)
+	}
+	if uint64(*ghUser.ID) != user.ID {
+		return users.User{}, fmt.Errorf("got github user ID %v, but wanted ID %v", *ghUser.ID, user.ID)
 	}
 	return users.User{
 		UserSpec:  user,
