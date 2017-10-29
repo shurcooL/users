@@ -14,35 +14,36 @@ import (
 // NewService creates a GitHub-backed users.Service using given GitHub client.
 // At this time it infers the current user from the client (its authentication info),
 // and cannot be used to serve multiple users.
-func NewService(client *github.Client) users.Service {
+func NewService(client *github.Client) (users.Service, error) {
 	if client == nil {
 		client = github.NewClient(nil)
 	}
-
-	s := service{
-		cl: client,
-	}
-
-	if u, _, err := s.cl.Users.Get(context.Background(), ""); err == nil {
-		s.currentUser = ghUser(u)
-		s.currentUserError = nil
-	} else if e, ok := err.(*github.ErrorResponse); ok && e.Response.StatusCode == http.StatusUnauthorized {
+	var currentUser users.User
+	switch u, _, err := client.Users.Get(context.Background(), ""); {
+	case err == nil:
+		currentUser = ghUser(u)
+	case isUnauthorized(err):
 		// There's no authenticated user.
-		s.currentUser = users.User{}
-		s.currentUserError = nil
-	} else {
-		s.currentUser = users.User{}
-		s.currentUserError = err
+		currentUser = users.User{}
+	default:
+		return nil, err
 	}
+	return service{
+		cl:          client,
+		currentUser: currentUser,
+	}, nil
+}
 
-	return s
+// isUnauthorized reports whether err is an unauthorized error response from GitHub.
+func isUnauthorized(err error) bool {
+	e, ok := err.(*github.ErrorResponse)
+	return ok && e.Response.StatusCode == http.StatusUnauthorized
 }
 
 type service struct {
 	cl *github.Client
 
-	currentUser      users.User
-	currentUserError error
+	currentUser users.User
 }
 
 func (s service) Get(ctx context.Context, user users.UserSpec) (users.User, error) {
@@ -69,11 +70,11 @@ func (s service) Get(ctx context.Context, user users.UserSpec) (users.User, erro
 }
 
 func (s service) GetAuthenticated(ctx context.Context) (users.User, error) {
-	return s.currentUser, s.currentUserError
+	return s.currentUser, nil
 }
 
 func (s service) GetAuthenticatedSpec(ctx context.Context) (users.UserSpec, error) {
-	return s.currentUser.UserSpec, s.currentUserError
+	return s.currentUser.UserSpec, nil
 }
 
 func (s service) Edit(ctx context.Context, er users.EditRequest) (users.User, error) {

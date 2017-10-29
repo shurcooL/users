@@ -13,35 +13,30 @@ import (
 // NewService creates a Asana-backed users.Service using given Asana client.
 // At this time it infers the current user from the client (its authentication info),
 // and cannot be used to serve multiple users.
-func NewService(client *asana.Client) users.Service {
+func NewService(client *asana.Client) (users.Service, error) {
 	if client == nil {
 		client = asana.NewClient(nil)
 	}
-
-	s := service{
-		cl: client,
-	}
-
-	if u, err := s.cl.GetAuthenticatedUser(context.Background(), nil); err == nil {
-		s.currentUser = asanaUser(u)
-		s.currentUserError = nil
-	} else if err == asana.ErrUnauthorized {
+	var currentUser users.User
+	switch u, err := client.GetAuthenticatedUser(context.Background(), nil); err {
+	case nil:
+		currentUser = asanaUser(u)
+	case asana.ErrUnauthorized:
 		// There's no authenticated user.
-		s.currentUser = users.User{}
-		s.currentUserError = nil
-	} else {
-		s.currentUser = users.User{}
-		s.currentUserError = err
+		currentUser = users.User{}
+	default:
+		return nil, err
 	}
-
-	return s
+	return service{
+		cl:          client,
+		currentUser: currentUser,
+	}, nil
 }
 
 type service struct {
 	cl *asana.Client
 
-	currentUser      users.User
-	currentUserError error
+	currentUser users.User
 }
 
 func (s service) Get(ctx context.Context, user users.UserSpec) (users.User, error) {
@@ -57,11 +52,11 @@ func (s service) Get(ctx context.Context, user users.UserSpec) (users.User, erro
 }
 
 func (s service) GetAuthenticated(ctx context.Context) (users.User, error) {
-	return s.currentUser, s.currentUserError
+	return s.currentUser, nil
 }
 
 func (s service) GetAuthenticatedSpec(ctx context.Context) (users.UserSpec, error) {
-	return s.currentUser.UserSpec, s.currentUserError
+	return s.currentUser.UserSpec, nil
 }
 
 func (s service) Edit(ctx context.Context, er users.EditRequest) (users.User, error) {
