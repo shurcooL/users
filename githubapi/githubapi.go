@@ -12,7 +12,8 @@ import (
 )
 
 // NewService creates a GitHub-backed users.Service using given GitHub client.
-// At this time it infers the current user from the client (its authentication info), and cannot be used to serve multiple users.
+// At this time it infers the current user from the client (its authentication info),
+// and cannot be used to serve multiple users.
 func NewService(client *github.Client) users.Service {
 	if client == nil {
 		client = github.NewClient(nil)
@@ -24,14 +25,14 @@ func NewService(client *github.Client) users.Service {
 
 	if u, _, err := s.cl.Users.Get(context.Background(), ""); err == nil {
 		s.currentUser = ghUser(u)
-		s.currentUserErr = nil
-	} else if ghErr, ok := err.(*github.ErrorResponse); ok && ghErr.Response.StatusCode == http.StatusUnauthorized {
+		s.currentUserError = nil
+	} else if e, ok := err.(*github.ErrorResponse); ok && e.Response.StatusCode == http.StatusUnauthorized {
 		// There's no authenticated user.
 		s.currentUser = users.User{}
-		s.currentUserErr = nil
+		s.currentUserError = nil
 	} else {
 		s.currentUser = users.User{}
-		s.currentUserErr = err
+		s.currentUserError = err
 	}
 
 	return s
@@ -40,8 +41,8 @@ func NewService(client *github.Client) users.Service {
 type service struct {
 	cl *github.Client
 
-	currentUser    users.User
-	currentUserErr error
+	currentUser      users.User
+	currentUserError error
 }
 
 func (s service) Get(ctx context.Context, user users.UserSpec) (users.User, error) {
@@ -68,11 +69,11 @@ func (s service) Get(ctx context.Context, user users.UserSpec) (users.User, erro
 }
 
 func (s service) GetAuthenticated(ctx context.Context) (users.User, error) {
-	return s.currentUser, s.currentUserErr
+	return s.currentUser, s.currentUserError
 }
 
 func (s service) GetAuthenticatedSpec(ctx context.Context) (users.UserSpec, error) {
-	return s.currentUser.UserSpec, s.currentUserErr
+	return s.currentUser.UserSpec, s.currentUserError
 }
 
 func (s service) Edit(ctx context.Context, er users.EditRequest) (users.User, error) {
