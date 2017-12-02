@@ -18,10 +18,6 @@ type user struct {
 	AvatarURL string `json:",omitempty"`
 	HTMLURL   string `json:",omitempty"`
 
-	// CONSIDER.
-	//CreatedAt time.Time
-	//UpdatedAt time.Time
-
 	SiteAdmin bool `json:",omitempty"`
 }
 
@@ -39,9 +35,6 @@ func fromUser(u users.User) user {
 		Email:     u.Email,
 		AvatarURL: u.AvatarURL,
 		HTMLURL:   u.HTMLURL,
-
-		//CreatedAt: u.CreatedAt,
-		//UpdatedAt: u.UpdatedAt,
 
 		SiteAdmin: u.SiteAdmin,
 	}
@@ -61,9 +54,6 @@ func (u user) User() users.User {
 		Email:     u.Email,
 		AvatarURL: u.AvatarURL,
 		HTMLURL:   u.HTMLURL,
-
-		//CreatedAt: u.CreatedAt,
-		//UpdatedAt: u.UpdatedAt,
 
 		SiteAdmin: u.SiteAdmin,
 	}
