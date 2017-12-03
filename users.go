@@ -3,7 +3,6 @@ package users
 
 import (
 	"context"
-	"time"
 )
 
 // Service for users.
@@ -56,9 +55,6 @@ type User struct {
 	Email     string // Public email.
 	AvatarURL string
 	HTMLURL   string
-
-	CreatedAt time.Time
-	UpdatedAt time.Time
 
 	SiteAdmin bool
 }
