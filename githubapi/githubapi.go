@@ -51,7 +51,7 @@ func (s service) Get(ctx context.Context, user users.UserSpec) (users.User, erro
 		return users.User{}, fmt.Errorf("user %v not found", user)
 	}
 
-	ghUser, _, err := s.cl.Users.GetByID(ctx, int(user.ID))
+	ghUser, _, err := s.cl.Users.GetByID(ctx, int64(user.ID))
 	if err != nil {
 		return users.User{}, err
 	}
