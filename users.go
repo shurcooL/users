@@ -34,9 +34,6 @@ type Store interface {
 
 	// Get fetches the specified user.
 	Get(ctx context.Context, user UserSpec) (User, error)
-
-	// CONSIDER: Delete user.
-	//Delete(ctx context.Context, user UserSpec) error
 }
 
 // UserSpec specifies a user.
@@ -46,10 +43,25 @@ type UserSpec struct {
 	Domain string
 }
 
+// THINK: (2016-03-06) Consider merging Elsewhere with root-most UserSpec.
+//        Maybe even use a set, order of linked accounts shouldn't matter, should it?
+//
+//        (2020-01-12) I'm not ready to commit to supporting multiple linked identities,
+//        so for now I'm documenting that Elsewhere is metadata only and not used for
+//        user equivalence or authentication purposes. But will keep thinking about this.
+
 // User represents a user.
 type User struct {
+	// UserSpec is the primary user identity. It is mostly used for user equivalence,
+	// and potentially for authentication for well-known domains (e.g., "github.com").
 	UserSpec
-	Elsewhere []UserSpec // THINK: Consider merging Elsewhere with root-most UserSpec. Maybe even use a set, order of linked accounts shouldn't matter, should it?
+	// CanonicalMe is an optional canonical user profile URL. When a non-zero value,
+	// it is used for identifying users that authenticate via the IndieAuth protocol.
+	CanonicalMe string
+
+	// Elsewhere represents alternative user identities. This information is not used for
+	// user equivalence or authentication purposes, but can be used for display purposes.
+	Elsewhere []UserSpec
 
 	Login     string
 	Name      string
