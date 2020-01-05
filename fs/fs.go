@@ -4,6 +4,7 @@ package fs
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 	"sync"
@@ -12,8 +13,8 @@ import (
 	"golang.org/x/net/webdav"
 )
 
-// NewStore creates an in-memory users.Store, backed by virtual filesystem
-// using root for storage.
+// NewStore creates an in-memory users.Store backed by
+// a virtual filesystem root for storage.
 func NewStore(root webdav.FileSystem) (users.Store, error) {
 	s := &store{
 		fs:    root,
@@ -54,9 +55,14 @@ func (s *store) load() error {
 }
 
 func (s *store) Create(ctx context.Context, user users.User) error {
+	if user.UserSpec.ID == 0 || user.UserSpec.Domain == "" {
+		return fmt.Errorf("Create: user ID 0 or empty domain are not valid")
+	}
+
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
+	// Check if user already exists.
 	if _, ok := s.users[user.UserSpec]; ok {
 		return os.ErrExist
 	}
@@ -74,6 +80,7 @@ func (s *store) Create(ctx context.Context, user users.User) error {
 
 	// Commit to memory second.
 	s.users[user.UserSpec] = user
+
 	return nil
 }
 

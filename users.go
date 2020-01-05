@@ -28,6 +28,7 @@ type Service interface {
 // Store for users.
 type Store interface {
 	// Create creates the specified user.
+	// UserSpec must specify a valid (i.e., non-zero) user.
 	// It returns os.ErrExist if the user already exists.
 	Create(ctx context.Context, user User) error
 
